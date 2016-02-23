@@ -20,12 +20,6 @@
 			} 
 		} 
 		$conn->close();
-		// Check if computed username, password, user_token true 
-		//$user_token_used = hash('sha256',$Username.$Password.$_SESSION['user_token']);
-		/*$login_status = True;
-		if ($user_token != $this_user_current_token) {
-			$login_status = False;
-		}*/
 		// Redirect Into Proper State (True / False)
 		if ($login_status) {
 			// Restart session pasca-login
@@ -44,12 +38,6 @@
 			    return $randomString;
 			}
 			$new_user_token = generateRandomString();
-	    	//$new_user_token_hash = hash('sha256',$Username.$Password.$new_user_token);
-	    	// Update tabel user dengan token baru
-			/*$conn = new mysqli("localhost","root","","tubesweb1");
-			$sql = "UPDATE user SET csrf_token=$new_user_token_hash WHERE Username='$Username' AND Password='$Password'";
-			mysqli_query($conn,$sql);
-			mysqli_close($conn);*/
 			// Update session variable
 			$_SESSION['user_token'] = $new_user_token;
 			// Redirect ke halaman utama

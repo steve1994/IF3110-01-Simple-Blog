@@ -60,6 +60,7 @@
             <div id="contact-area">
                 <form method="post" action="edit.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
 					<input type="hidden" name="ID_post" id="ID_post" value="<?php echo $ID_post; ?>">
+
                     <label for="Judul">Judul:</label>
                     <input type="text" name="Judul" id="Judul" value=
 					"<?php 
@@ -156,4 +157,8 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 99f608b41a7f80cbd1e93ffe79398af40bb9b94b

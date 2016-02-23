@@ -19,18 +19,6 @@
 		if ($is_user_exist) {
 			header('Location:register.php');
 		} else {
-			// Generate user token baru yang dihash
-			/*function generateRandomString() {
-		        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		        $charactersLength = strlen($characters);
-		        $randomString = '';
-		        $length = 20;
-		        for ($i = 0; $i < $length; $i++) {
-		            $randomString .= $characters[rand(0, $charactersLength - 1)];
-		        }
-		        return $randomString;
-		    }
-		    $_SESSION['user_token'] = generateRandomString();*/
 			// Update username, password, beserta token user 
 			$conn = new mysqli("localhost","root","","tubesweb1");
 			$sql = "INSERT INTO user (Username,Password,Email) VALUES ('$Username','$Password','$Email')";

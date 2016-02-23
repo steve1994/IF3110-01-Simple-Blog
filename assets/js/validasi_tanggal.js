@@ -65,3 +65,4 @@ function validateDate(date) // Regex untuk mengecek penulisan tanggal
 {
 	return (/^\d{2}[./-]\d{2}[./-]\d{4}$/).test(date);
 }
+

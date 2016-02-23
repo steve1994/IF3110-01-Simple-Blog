@@ -321,7 +321,7 @@ div.cover > img {
 }
 
 .art-body-inner blockquote p:first-child:before {
-  color: #ccc;
+  color: #ccc
   content: "“";
   font-size: 4em;
   line-height: 0.1em;

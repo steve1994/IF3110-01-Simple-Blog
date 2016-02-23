@@ -31,7 +31,6 @@
 </head>
 
 <body class="default">
-
 	
 <?php
 	$ID_post = $_GET['q']; // passing parameter url
@@ -43,6 +42,7 @@
 	{
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
+
 	// DELETE RECORD DI DATABASE
 	mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
 	mysqli_close($connection);
