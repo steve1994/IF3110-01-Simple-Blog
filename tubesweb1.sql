@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2016 at 10:01 AM
+-- Generation Time: Feb 23, 2016 at 11:44 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `daftarpost` (
   `Judul` text NOT NULL,
   `Tanggal` text NOT NULL,
   `IsiPostHTML` text NOT NULL,
+  `Image` text NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
@@ -74,9 +75,9 @@ CREATE TABLE IF NOT EXISTS `daftarpost` (
 -- Dumping data for table `daftarpost`
 --
 
-INSERT INTO `daftarpost` (`ID`, `Judul`, `Tanggal`, `IsiPostHTML`) VALUES
-(21, 'Pak Jokowi', '12-12-2014', '												Hari senin (20/10) nanti akan menjadi hari yang bersejarah buat bangsa Indonesia karena bapak presiden/wakil presiden yang baru akan dilantik. Makanya nonton berita :p									'),
-(22, 'Sat', '22-07-2018', 'Saya suka cakuee		');
+INSERT INTO `daftarpost` (`ID`, `Judul`, `Tanggal`, `IsiPostHTML`, `Image`) VALUES
+(21, 'Pak Jokowi', '12-12-2014', '												Hari senin (20/10) nanti akan menjadi hari yang bersejarah buat bangsa Indonesia karena bapak presiden/wakil presiden yang baru akan dilantik. Makanya nonton berita :p									', ''),
+(22, 'Sat', '22-07-2018', 'Saya suka cakuee		', '');
 
 -- --------------------------------------------------------
 
@@ -86,7 +87,7 @@ INSERT INTO `daftarpost` (`ID`, `Judul`, `Tanggal`, `IsiPostHTML`) VALUES
 
 CREATE TABLE IF NOT EXISTS `user` (
   `Username` varchar(20) NOT NULL,
-  `Password` varchar(20) NOT NULL,
+  `Password` varchar(100) NOT NULL,
   `Email` varchar(20) NOT NULL,
   PRIMARY KEY (`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -96,8 +97,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`Username`, `Password`, `Email`) VALUES
-('Steve', '8d969eef6ecad3c29a3a', 'steve.harnadi@gmail.'),
-('Vanda', '8d969eef6ecad3c29a3a', 'vanda@gmail.com');
+('Steve', 'cdd0e18ca529669c1a98a8895acf16f38a0620d63e39897da53ccc84705a4090', 'steve.harnadi@gmail.');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
