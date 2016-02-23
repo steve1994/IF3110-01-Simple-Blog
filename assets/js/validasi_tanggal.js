@@ -24,9 +24,25 @@ function KeluarkanValidasi() // Fungsi untuk mengeluarkan pop up message jika fo
 			var inputbulan = PisahElemenTanggal[1];
 			var inputtanggal = PisahElemenTanggal[0];
 			
-			if (inputtahun < tahunsekarang) // bandingkan tahun dengan tahun sekarang
+			if (inputtahun > tahunsekarang) // bandingkan tahun dengan tahun sekarang
 			{
-				if (inputbulan < bulansekarang) // bandingkan bulan dengan bulan sekarang
+				return true;
+			}
+			else if (inputtahun < tahunsekarang) 
+			{
+				alert("Tanggal tidak valid. Masukkan tanggal yang relevan.");return false;
+			}
+			else
+			{
+				if (inputbulan > bulansekarang) // bandingkan bulan dengan bulan sekarang
+				{
+					return true;
+				}
+				else if (inputbulan < bulansekarang)
+				{
+					alert("Tanggal tidak valid. Masukkan tanggal yang relevan.");return false;
+				}
+				else
 				{
 					if (inputtanggal >= tanggalsekarang) // bandingkan hari dengan hari sekarang
 					{
@@ -34,17 +50,9 @@ function KeluarkanValidasi() // Fungsi untuk mengeluarkan pop up message jika fo
 					}
 					else
 					{
-						alert("Tanggal tidak valid");return false;
+						alert("Tanggal tidak valid. Masukkan tanggal yang relevan.");return false;
 					}
 				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				return true;
 			}
 		}
 		else

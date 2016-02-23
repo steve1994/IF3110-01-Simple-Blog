@@ -34,28 +34,12 @@
 <body class="default">
 <?php
 	// DAPAT VARIABEL POST GLOBAL
-	$judul = $_POST['Judul']; // dapat judul post
-	$tanggal_baru = $_POST['Tanggal']; // dapat tanggal baru dari judul post terkait
-	$konten_baru = $_POST['Konten']; // dapat konten baru dari judul post terkait
+	$ID= $_POST['ID_post']; // dapat ID post
+	$judul = htmlentities($_POST['Judul']); // dapat judul post
+	$tanggal_baru = htmlentities($_POST['Tanggal']); // dapat tanggal baru dari judul post terkait
+	$konten_baru = htmlentities($_POST['Konten']); // dapat konten baru dari judul post terkait
 ?>
-<?php
-	// CARI ID POST
-	// Buat koneksi ke database tubesweb1
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-	if (mysqli_connect_errno())
-	{
-		echo "Failed to connect to MySQL: " .mysqli_connect_error();
-	}
-	
-	// Cari ID dari judul Post terlebih dahulu
-	$hasil_baca = mysqli_query($connection, "SELECT * from daftarpost WHERE judul='$judul'");
-	while ($row = mysqli_fetch_array($hasil_baca))
-	{
-		$ID = $row['ID'];
-	}
-	// Akhiri transaksi
-	mysqli_close($connection);
-?>
+
 <?php	
 	// UPDATE POST DENGAN ID YANG SUDAH DICARI SEBELUMNYA
 	// Buat koneksi ke database tubesweb1
@@ -65,12 +49,15 @@
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
 	// Lakukan update data ke tabel daftarpost dengan ID yang sudah didapatkan
-	$updatequery = "UPDATE daftarpost SET Tanggal='$tanggal_baru', IsiPostHTML='$konten_baru' WHERE daftarpost.ID='$ID'";
+	$updatequery = "UPDATE daftarpost SET Judul='$judul', Tanggal='$tanggal_baru', IsiPostHTML='$konten_baru' WHERE daftarpost.ID='$ID'";
 	mysqli_query($connection, $updatequery);	
 	// Akhiri transaksi
 	mysqli_close($connection);
 ?>
-<H2>Data Berhasil Diperbaharui</H2>
-<a href="index.php">LANJUT KE HALAMAN UTAMA</a>
+
+<?php
+	// Refer ke halaman lain
+	header("Location:index.php");
+?>
 </body>
 </html>

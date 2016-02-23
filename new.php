@@ -44,9 +44,9 @@
 	// Asumsi : tabel daftarpost sudah dibuat secara manual dalam database tubesweb1
 	// Langsung lakukan insert data dari form ke tabel daftarpost
 	
-	$judul = $_POST['Judul'];
-	$tanggal = $_POST['Tanggal'];
-	$content = $_POST['Konten'];
+	$judul = htmlentities($_POST['Judul']);
+	$tanggal = htmlentities($_POST['Tanggal']);
+	$content = htmlentities($_POST['Konten']);
 	$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML) VALUES ('$judul','$tanggal','$content')";
 	
 	if (!mysqli_query($connection, $insertquery))
@@ -55,8 +55,10 @@
 	}
 	// Akhiri transaksi
 	mysqli_close($connection);
+	
+	// Refer ke halaman lain
+	header("Location:index.php");
 ?>
-<H2>Data Berhasil Ditambahkan</H2>
-<a href="index.php">LANJUT KE HALAMAN UTAMA</a>
+
 </body>
 </html>

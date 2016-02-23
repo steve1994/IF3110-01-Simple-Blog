@@ -55,10 +55,11 @@
 
     <div class="art-body">
         <div class="art-body-inner">
-            <h2>Tambah Post</h2>
+            <h2>Edit Post</h2>
 
             <div id="contact-area">
                 <form method="post" action="edit.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
+					<input type="hidden" name="ID_post" id="ID_post" value="<?php echo $ID_post; ?>">
                     <label for="Judul">Judul:</label>
                     <input type="text" name="Judul" id="Judul" value=
 					"<?php 
@@ -80,10 +81,45 @@
 					?>">
 
                     <label for="Tanggal">Tanggal:</label>
-                    <input type="text" name="Tanggal" id="Tanggal">
+                    <input type="text" name="Tanggal" id="Tanggal" value=
+					"<?php
+						// MENAMPILKAN JUDUL POST
+						// Buat koneksi ke database tubesweb1
+						$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+						if (mysqli_connect_errno())
+						{
+							echo "Failed to connect to MySQL: " .mysqli_connect_error();
+						}
+
+						$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost where ID='$ID_post'");
+						while ($row = mysqli_fetch_array($hasil_baca))
+						{	
+							echo $row['Tanggal'];
+						}
+						// Akhiri transaksi
+						mysqli_close($connection);
+					?>">
                     
                     <label for="Konten">Konten:</label><br>
-                    <textarea name="Konten" rows="20" cols="20" id="Konten"></textarea>
+                    <textarea name="Konten" rows="20" cols="20" id="Konten">
+						<?php
+							// MENAMPILKAN JUDUL POST
+							// Buat koneksi ke database tubesweb1
+							$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+							if (mysqli_connect_errno())
+							{
+								echo "Failed to connect to MySQL: " .mysqli_connect_error();
+							}
+
+							$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost where ID='$ID_post'");
+							while ($row = mysqli_fetch_array($hasil_baca))
+							{	
+								echo $row['IsiPostHTML'];
+							}
+							// Akhiri transaksi
+							mysqli_close($connection);
+						?>
+					</textarea>
 
                     <input type="submit" name="submit" value="Simpan" class="submit-button">
                 </form>

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
 
@@ -29,69 +28,64 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
-<title>Simple Blog</title>
+<title>Simple Blog | Registrasi</title>
 
 <?php 
 	session_start();
-	if (!isset($_SESSION['user_token'])) {
-		header('Location:login.php');
-	} 
+    function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        $length = 20;
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    $_SESSION['csrf_token'] = generateRandomString();
 ?>
 
 </head>
 
 <body class="default">
-
 <div class="wrapper">
 
 <nav class="nav">
-    <a style="border:none;" id="logo" href="index.php"><h1>Simple<span>-</span>Blog</h1></a>
-    <ul class="nav-primary">
-        <li><a href="new_post.php">+ Tambah Post</a></li>
-    </ul>
+    <a style="border:none;" id="logo" href="index.html"><h1>Simple<span>-</span>Blog</h1></a>
 </nav>
 
-<div id="home">
-    <div class="posts">
-		<nav class="art-list">
-			<ul class="art-list-body" id="IsiList">
-				<?php
-				// BACA DATA DARI DATABASE DAFTARPOST UNTUK DITULIS DI SINI
-				// Buat koneksi ke database tubesweb1
-				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-				if (mysqli_connect_errno())
-				{
-					echo "Failed to connect to MySQL: " .mysqli_connect_error();
-				}
-				
-				// Tampilkan isi tabel datapost dari database tubesweb1 terurut dari bawah
-				$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost ORDER BY ID desc");
-				while ($row = mysqli_fetch_array($hasil_baca))
-				{	
-					echo "<li class='art-list-item'>";
-					echo "	<div class='art-list-item-title-and-time'>";
-                    echo "		<h2 class='art-list-title'><a href='post.php?q=$row[ID]'>";
-					echo 			$row['Judul'];
-					echo "		</a></h2>";
-                    echo "		<div class='art-list-time'>";
-					echo 			$row['Tanggal'];
-					echo "		</div>";
-					echo "	</div>";
-					echo "	<p>";
-					echo 		$row['IsiPostHTML'];
-					echo "	</p>";
-					echo "	<p>";
-					echo "		<a href='edit_post.php?q2=$row[ID]'>Edit</a> | <a href='delete.php?q=$row[ID]' onclick='return hapusPost($row[ID])'>Hapus</a>";
-					echo "	</p>";
-					echo "</li>"; 
-				}
-				// Akhiri transaksi
-				mysqli_close($connection);
-			?>
-			</ul>
-		</nav>
+<article class="art simple post">
+
+    <h2 class="art-title" style="margin-bottom:40px">-</h2>
+
+    <div class="art-body">
+        <div class="art-body-inner">
+            <h2>User Registration</h2>
+
+            <div id="contact-area">
+
+                <form method="post" action="validate_registrasi.php" name="validate_registrasi" onsubmit="return ValidasiPassword()">
+
+                    <label for="Username">Username:</label>
+                    <input type="text" name="Username" id="Username">
+
+                    <label for="Email">Email:</label>
+                    <input type="text" name="Email" id="Email">                    
+                    <label for="Password">Password:</label>
+                    <input type="password" name="Password" id="Password" class="masked">
+
+                    <label for="Confirm Again">Confirm :</label>
+                    <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="masked">
+
+                    <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+                    <input type="submit" name="submit" value="Register" class="submit-button">
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+
+</article>
 
 <footer class="footer">
     <div class="back-to-top"><a href="">Back to top</a></div>
@@ -114,22 +108,11 @@
 
 </div>
 
-<script>
-	function hapusPost(ID) // Lakukan konfirmasi ke user apakah mau menghapus post dengan ID 'ID_post' atau tidak
-	{
-		if (confirm("Apakah Anda yakin menghapus post ini?")==true)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-</script>
 <script type="text/javascript" src="assets/js/fittext.js"></script>
 <script type="text/javascript" src="assets/js/app.js"></script>
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
+<script type="text/javascript" src="assets/js/generate_token.js"></script>
+<script type="text/javascript" src="assets/js/validasi_register_password.js"></script>
 
 </body>
 </html>

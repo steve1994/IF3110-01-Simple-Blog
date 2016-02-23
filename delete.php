@@ -31,27 +31,37 @@
 </head>
 
 <body class="default">
-<script>
+
 	
 <?php
 	$ID_post = $_GET['q']; // passing parameter url
 	
+	// HAPUS POST DARI TABEL DAFTAR POST
 	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
 	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
 	if (mysqli_connect_errno())
 	{
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
-	
 	// DELETE RECORD DI DATABASE
 	mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
+	mysqli_close($connection);
+	
+	// HAPUS KOMENTAR DARI POST TERKAIT
+	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
+	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	if (mysqli_connect_errno())
+	{
+		echo "Failed to connect to MySQL: " .mysqli_connect_error();
+	}
+	// DELETE RECORD DI DATABASE
 	mysqli_query($connection,"DELETE FROM daftarkomentar WHERE ID='$ID_post'");
 	mysqli_close($connection);
+	
+	// Refer ke halaman lain
+	header("Location:index.php");
 ?>
-</script>
 
-<H2>Post Berhasil Dihapus</H2>
-<a href="index.php">LANJUT KE HALAMAN UTAMA</a>
 </body>
 </html>
 

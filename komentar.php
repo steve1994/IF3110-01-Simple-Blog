@@ -1,10 +1,10 @@
 <?php
 	// VARIABEL (POST DAN GET)
-	$nama_komentator = $_GET['q2'];
-	$email = $_GET['q3'];
-	$isi_komentar = $_GET['q4'];
+	$nama_komentator = htmlentities($_GET['q2']);
+	$email = htmlentities($_GET['q3']);
+	$isi_komentar = htmlentities($_GET['q4']);
 	$ID_post = $_GET['q1'];
-	$tanggal = date('d-m-Y');
+	$tanggal = htmlentities(date('d-m-Y'));
 	$response_text=""; // Variabel penampung string hasil
 	
 
@@ -44,7 +44,7 @@
 		$response_text.= "		<h2 class='art-list-title'><a href='post.html'>".$row['Nama']."</a></h2>";
 		$response_text.= "		<div class='art-list-time'>".$row['TanggalKomentar']."</div>";
 		$response_text.= "	</div>";
-		$response_text.= "	<p>".$row['IsiKomentar']."</p>";
+		$response_text.= "	<p>".htmlentities($row['IsiKomentar'])."</p>";
 		$response_text.= "</li>";
 	}
 	// Akhiri transaksi

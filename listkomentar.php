@@ -20,7 +20,7 @@
 		$response_text.= "		<h2 class='art-list-title'><a href='post.html'>".$row['Nama']."</a></h2>";
 		$response_text.= "		<div class='art-list-time'>".$row['TanggalKomentar']."</div>";
 		$response_text.= "	</div>";
-		$response_text.= "	<p>".$row['IsiKomentar']."</p>";
+		$response_text.= "	<p>".htmlentities($row['IsiKomentar'])."</p>";
 		$response_text.= "</li>";
 	}
 	// Akhiri transaksi
