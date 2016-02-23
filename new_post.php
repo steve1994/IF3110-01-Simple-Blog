@@ -33,6 +33,12 @@
 
 <?php 
     session_start();
+    if (!isset($_SESSION['user_token'])) {
+        header('Location:login.php');
+    } 
+?>
+
+<?php 
     function generateRandomString() {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -68,10 +74,7 @@
             <h2>Tambah Post</h2>
 
             <div id="contact-area">
-                <form method="post" action="new.php" name="form_new_post"  onsubmit="return KeluarkanValidasi()">
-                    <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                    <input type="hidden" name="path_name" id="path_name">
-
+                <form enctype="multipart/form-data" method="post" action="new.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
                     <label for="Judul">Judul:</label>
                     <input type="text" name="Judul" id="Judul">
 
@@ -83,6 +86,8 @@
 
                     <label for="Gambar">Gambar:</label><br>
                     <input type="file" name="Gambar" id="Gambar">
+
+                    <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                     <input type="submit" name="submit" value="Simpan" class="submit-button">
                 </form>

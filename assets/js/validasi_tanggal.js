@@ -2,7 +2,6 @@ function KeluarkanValidasi() // Fungsi untuk mengeluarkan pop up message jika fo
 {
 	// Dapatkan value tanggal pada saat submit
 	var tanggal = document.forms["form_new_post"]["Tanggal"].value;
-	alert(tanggal);
 	
 	// Simpan tanggal hari ini dengan elemen-elemennya
 	var currentdate = new Date();
@@ -72,17 +71,4 @@ function validateDate(date) // Regex untuk mengecek penulisan tanggal
 function ProcessImage() {
 	var file_name = document.forms["form_new_post"]["Gambar"].value;
 	document.forms["form_new_post"]["path_name"].value = file_name;
-}
-function ValidasiNewPost() {
-	return KeluarkanValidasi() && ProcessImage();
-}
-function generateRandomString() {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    $length = 20;
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
 }

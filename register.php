@@ -31,7 +31,13 @@
 <title>Simple Blog | Registrasi</title>
 
 <?php 
-	session_start();
+    session_start();
+    if (isset($_SESSION['user_token'])) {
+        header('Location:index.php');
+    } 
+?>
+
+<?php 
     function generateRandomString() {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -70,7 +76,8 @@
                     <input type="text" name="Username" id="Username">
 
                     <label for="Email">Email:</label>
-                    <input type="text" name="Email" id="Email">                    
+                    <input type="text" name="Email" id="Email">   
+
                     <label for="Password">Password:</label>
                     <input type="password" name="Password" id="Password" class="masked">
 
@@ -78,6 +85,7 @@
                     <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="masked">
 
                     <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    <input type="hidden" name="hashed_password" id="hashed_password">
 
                     <input type="submit" name="submit" value="Register" class="submit-button">
                 </form>
@@ -113,6 +121,7 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 <script type="text/javascript" src="assets/js/generate_token.js"></script>
 <script type="text/javascript" src="assets/js/validasi_register_password.js"></script>
+<script type="text/javascript" src="assets/js/validasi_email.js"></script>
 <script type="text/javascript" src="CryptoJS/rollups/sha256.js"></script>
 
 </body>

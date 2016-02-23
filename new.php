@@ -33,34 +33,37 @@
 
 <body class="default">
 <?php	
+	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	if (mysqli_connect_errno())
+	{
+		echo "Failed to connect to MySQL: " .mysqli_connect_error();
+	}
 	// Asumsi : tabel daftarpost sudah dibuat secara manual dalam database tubesweb1
 	// Langsung lakukan insert data dari form ke tabel daftarpost
 	$judul = htmlentities($_POST['Judul']);
 	$tanggal = htmlentities($_POST['Tanggal']);
 	$content = htmlentities($_POST['Konten']);
-	$gambar = htmlentities($_POST['path_name']);
-	$gambar_token = htmlentities($_POST['image_token']);
 	$csrf_token = $_POST['csrf_token'];
 
 	session_start();
 	if ($csrf_token == $_SESSION['csrf_token']) {
-		// Simpan image ke server 
-		if (isset($_FILES['Gambar'])) {
-			$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-			if (mysqli_connect_errno())
-			{
-				echo "Failed to connect to MySQL: " .mysqli_connect_error();
-			}
-			$path_images = '/images/'.$gambar;
-			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image, Image_Token) VALUES ('$judul','$tanggal','$content','$path_images','$gambar_token')";
+		if (isset($_FILES['Gambar']['name'])) {
+			// Simpan image ke server 
+			$path_images = 'images/'.$_FILES['Gambar']['name'];
+			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES ('$judul','$tanggal','$content','$path_images')";
 			if (!mysqli_query($connection, $insertquery))
 			{
 				die('Error: '. mysqli_error($connection));
 			}
 			mysqli_close($connection);
 
-			mkdir('/images/');
-			if (move_uploaded_file($_FILES['Gambar']['tmp_name'], '/images/'.$_FILES['Gambar']['name'])) {
+			// Buat direktori penyimpanan image jika belum ada
+			if (!file_exists('images/')) {
+				mkdir('images/');
+			}
+
+			// Upload file jpg ke direktori tersebut
+			if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
 				echo "File is valid\n";
 			} else {
 				echo "Upload failed\n";

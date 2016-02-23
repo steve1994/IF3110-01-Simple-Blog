@@ -31,7 +31,13 @@
 <title>Simple Blog | Login</title>
 
 <?php 
-	session_start();
+    session_start();
+    if (isset($_SESSION['user_token'])) {
+        header('Location:index.php');
+    } 
+?>
+
+<?php 
 	function generateRandomString() {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
