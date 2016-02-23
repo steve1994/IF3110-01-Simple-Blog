@@ -31,6 +31,20 @@
 
 <title>Simple Blog | Tambah Post</title>
 
+<?php 
+    session_start();
+    function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        $length = 20;
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    $_SESSION['csrf_token'] = generateRandomString();
+?>
 
 </head>
 
@@ -55,6 +69,9 @@
 
             <div id="contact-area">
                 <form method="post" action="new.php" name="form_new_post"  onsubmit="return KeluarkanValidasi()">
+                    <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    <input type="hidden" name="path_name" id="path_name">
+
                     <label for="Judul">Judul:</label>
                     <input type="text" name="Judul" id="Judul">
 

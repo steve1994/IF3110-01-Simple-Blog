@@ -32,33 +32,49 @@
 </head>
 
 <body class="default">
-<?php
-	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
-	// Asumsi : database tubesweb1 sudah dibuat secara manual
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-	if (mysqli_connect_errno())
-	{
-		echo "Failed to connect to MySQL: " .mysqli_connect_error();
-	}
-	
+<?php	
 	// Asumsi : tabel daftarpost sudah dibuat secara manual dalam database tubesweb1
 	// Langsung lakukan insert data dari form ke tabel daftarpost
-	
 	$judul = htmlentities($_POST['Judul']);
 	$tanggal = htmlentities($_POST['Tanggal']);
 	$content = htmlentities($_POST['Konten']);
-	$gambar = htmlentities($_POST['Gambar']);
-	$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES ('$judul','$tanggal','$content','$gambar')";
-	
-	if (!mysqli_query($connection, $insertquery))
-	{
-		die('Error: '. mysqli_error($connection));
+	$gambar = htmlentities($_POST['path_name']);
+	$gambar_token = htmlentities($_POST['image_token']);
+	$csrf_token = $_POST['csrf_token'];
+
+	session_start();
+	if ($csrf_token == $_SESSION['csrf_token']) {
+		// Simpan image ke server 
+		if (isset($_FILES['Gambar'])) {
+			$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+			if (mysqli_connect_errno())
+			{
+				echo "Failed to connect to MySQL: " .mysqli_connect_error();
+			}
+			$path_images = '/images/'.$gambar;
+			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image, Image_Token) VALUES ('$judul','$tanggal','$content','$path_images','$gambar_token')";
+			if (!mysqli_query($connection, $insertquery))
+			{
+				die('Error: '. mysqli_error($connection));
+			}
+			mysqli_close($connection);
+
+			mkdir('/images/');
+			if (move_uploaded_file($_FILES['Gambar']['tmp_name'], '/images/'.$_FILES['Gambar']['name'])) {
+				echo "File is valid\n";
+			} else {
+				echo "Upload failed\n";
+			}
+		}
+
+		// Redirect ke halaman login
+		header("Location:index.php");
+	} else {
+		// Redirect ke form tambah post
+		header("Location:new_post.php");
 	}
-	// Akhiri transaksi
-	mysqli_close($connection);
+
 	
-	// Refer ke halaman lain
-	header("Location:index.php");
 ?>
 
 </body>
