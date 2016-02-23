@@ -115,6 +115,9 @@
 					$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost where ID='$ID_post'");
 					while ($row = mysqli_fetch_array($hasil_baca))
 					{	
+						if (file_exists($row['Image'])) {
+							echo "<img src='".$row['Image']."' height='500' width='500' align='middle'><BR>";
+						} 
 						echo $row['IsiPostHTML'];
 					}
 					// Akhiri transaksi
