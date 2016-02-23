@@ -1,5 +1,4 @@
 function ValidasiPassword() {
-	var CryptoJS = require("CryptoJS");
 	var password = document.forms["validate_registrasi"]["Password"].value;
 	var confirm_password = document.forms["validate_registrasi"]["ConfirmPassword"].value;
 	if (password==confirm_password) {
@@ -13,7 +12,6 @@ function ValidasiPassword() {
 }
 
 function HashPassword() {
-	var CryptoJS = require("CryptoJS");
 	var password = document.forms["validate"]["Password"].value;
 	var hash256_password = CryptoJS.SHA256(password);
 	document.forms["validate"]["Password"].value = hash256_password;

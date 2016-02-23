@@ -47,7 +47,8 @@
 	$judul = htmlentities($_POST['Judul']);
 	$tanggal = htmlentities($_POST['Tanggal']);
 	$content = htmlentities($_POST['Konten']);
-	$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML) VALUES ('$judul','$tanggal','$content')";
+	$gambar = htmlentities($_POST['Gambar']);
+	$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES ('$judul','$tanggal','$content','$gambar')";
 	
 	if (!mysqli_query($connection, $insertquery))
 	{

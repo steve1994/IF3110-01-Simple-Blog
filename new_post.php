@@ -64,6 +64,9 @@
                     <label for="Konten">Konten:</label><br>
                     <textarea name="Konten" rows="20" cols="20" id="Konten"></textarea>
 
+                    <label for="Gambar">Gambar:</label><br>
+                    <input type="file" name="Gambar" id="Gambar">
+
                     <input type="submit" name="submit" value="Simpan" class="submit-button">
                 </form>
             </div>

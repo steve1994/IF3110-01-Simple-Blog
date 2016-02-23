@@ -113,6 +113,7 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 <script type="text/javascript" src="assets/js/generate_token.js"></script>
 <script type="text/javascript" src="assets/js/validasi_register_password.js"></script>
+<script type="text/javascript" src="CryptoJS/rollups/sha256.js"></script>
 
 </body>
 </html>

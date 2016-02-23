@@ -82,7 +82,7 @@
 </article>
 
 <footer class="footer">
-    <div class="back-to-top"><a href="">Back to top</a> | <a href="register.php">Register</a></div>
+    <div class="back-to-top"><a href="#">Remember Password</a> | <a href="register.php">Register</a></div>
     <!-- <div class="footer-nav"><p></p></div> -->
     <div class="psi">&Psi;</div>
     <aside class="offsite-links">
@@ -107,6 +107,7 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 <script type="text/javascript" src="assets/js/generate_token.js"></script>
 <script type="text/javascript" src="assets/js/validasi_register_password.js"></script>
+<script type="text/javascript" src="CryptoJS/rollups/sha256.js"></script>
 
 </body>
 </html>
