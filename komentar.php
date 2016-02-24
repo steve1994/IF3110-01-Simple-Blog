@@ -1,3 +1,10 @@
+<?php 
+	session_start();
+	if (!isset($_SESSION['user_token'])) {
+		header('Location:login.php');
+	} 
+?>
+
 <?php
 	// VARIABEL (POST DAN GET)
 	$nama_komentator = htmlentities($_GET['q2']);

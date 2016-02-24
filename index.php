@@ -35,7 +35,23 @@
 	session_start();
 	if (!isset($_SESSION['user_token'])) {
 		header('Location:login.php');
-	} 
+	} else {
+		// Restart session login
+		session_unset();
+		session_destroy();
+		session_start();
+		function generateRandomString() {
+		    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		    $charactersLength = strlen($characters);
+		    $randomString = '';
+		    $length = 20;
+		    for ($i = 0; $i < $length; $i++) {
+		        $randomString .= $characters[rand(0, $charactersLength - 1)];
+		    }
+		    return $randomString;
+		}
+		$_SESSION['user_token'] = generateRandomString();
+	}
 ?>
 
 </head>

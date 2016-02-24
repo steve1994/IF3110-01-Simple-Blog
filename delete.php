@@ -30,6 +30,13 @@
 
 </head>
 
+<?php 
+	session_start();
+	if (!isset($_SESSION['user_token'])) {
+		header('Location:login.php');
+	} 
+?>
+
 <body class="default">
 	
 <?php

@@ -1,3 +1,10 @@
+<?php 
+	session_start();
+	if (!isset($_SESSION['user_token'])) {
+		header('Location:login.php');
+	} 
+?>
+
 <?php
 	// VARIABEL (POST DAN GET)
 	$ID_post = $_GET['q1'];

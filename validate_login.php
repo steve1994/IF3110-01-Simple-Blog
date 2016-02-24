@@ -20,10 +20,6 @@
 		$conn->close();
 		// Redirect Into Proper State (True / False)
 		if ($login_status) {
-			// Restart session pasca-login
-			/*session_unset();
-			session_destroy();*/
-			session_start();
 			// Generate new user token pasca-login
 			function generateRandomString() {
 			    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
