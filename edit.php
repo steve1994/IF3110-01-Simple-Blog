@@ -50,7 +50,7 @@
 			$file_size = $_FILES['Gambar']['size'];
 			$file_type = $_FILES['Gambar']['type'];
 
-			if (($file_size < 2000000) && (strpos($file_type,"image"))) {
+			if (($file_size < 2000000) && (strpos($file_type,"image")) !== FALSE) {
 				// Dapatkan path nama baru dari gambar
 				$path_images = 'images/'.$_FILES['Gambar']['name'];
 				// Buat direktori penyimpanan image jika belum ada

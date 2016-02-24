@@ -58,9 +58,8 @@
 			// Check file type and file size
 			$file_size = $_FILES['Gambar']['size'];
 			$file_type = $_FILES['Gambar']['type'];
-			echo $file_type."<BR>";
 
-			if (($file_size < 2000000) && (strpos($file_type,"image"))) {
+			if (($file_size < 2000000) and (strpos($file_type,"image")) !== FALSE) {
 				// Simpan image ke server 
 				$path_images = 'images/'.$_FILES['Gambar']['name'];
 				$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES (?,?,?,?)";
