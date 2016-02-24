@@ -103,7 +103,7 @@
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
 	// DELETE RECORD DI DATABASE
-	$delete_komentar = "DELETE FROM daftarkomentar WHERE ID=?";
+	$delete_komentar = "DELETE FROM daftarkomentar WHERE ID_post_terkait=?";
 	$result = $connection->prepare($delete_komentar);
 	if ($result === false) {
 		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);

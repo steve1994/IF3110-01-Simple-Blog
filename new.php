@@ -48,8 +48,6 @@
 	// Asumsi : tabel daftarpost sudah dibuat secara manual dalam database tubesweb1
 	// Langsung lakukan insert data dari form ke tabel daftarpost
 	$csrf_token = $_POST['csrf_token'];
-
-	session_start();
 	if ($csrf_token == $_SESSION['csrf_token']) {
 		// Escape SQL Injection
 		$judul = mysqli_real_escape_string($connection,htmlentities($_POST['Judul']));
@@ -57,32 +55,41 @@
 		$content = mysqli_real_escape_string($connection,htmlentities($_POST['Konten']));
 
 		if (isset($_FILES['Gambar']['name'])) {
-			// Simpan image ke server 
-			$path_images = 'images/'.$_FILES['Gambar']['name'];
-			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES (?,?,?,?)";
-			$result = $connection->prepare($insertquery);
-			if ($result === false) {
-				trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
-			}
-			$result->bind_param('ssss',$judul,$tanggal,$content,$path_images);
-			$result->execute();
-			mysqli_close($connection);
+			// Check file type and file size
+			$file_size = $_FILES['Gambar']['size'];
+			$file_type = $_FILES['Gambar']['type'];
 
-			// Buat direktori penyimpanan image jika belum ada
-			if (!file_exists('images/')) {
-				mkdir('images/');
-			}
+			if (($file_size < 2000000) && (strpos($file_type,"image"))) {
+				// Simpan image ke server 
+				$path_images = 'images/'.$_FILES['Gambar']['name'];
+				$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES (?,?,?,?)";
+				$result = $connection->prepare($insertquery);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+				}
+				$result->bind_param('ssss',$judul,$tanggal,$content,$path_images);
+				$result->execute();
+				mysqli_close($connection);
 
-			// Upload file jpg ke direktori tersebut
-			if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
-				echo "File is valid\n";
+				// Buat direktori penyimpanan image jika belum ada
+				if (!file_exists('images/')) {
+					mkdir('images/');
+				}
+
+				// Upload file jpg ke direktori tersebut
+				if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
+					echo "File is valid\n";
+				} else {
+					echo "Upload failed\n";
+				}
+
+				// Redirect ke halaman login
+				header("Location:index.php");
 			} else {
-				echo "Upload failed\n";
+				echo "Not supported file upload\n";
+				echo "<a href='new_post.php'> BACK TO FORM </a>";
 			}
 		}
-
-		// Redirect ke halaman login
-		header("Location:index.php");
 	} else {
 		// Redirect ke form tambah post
 		header("Location:new_post.php");

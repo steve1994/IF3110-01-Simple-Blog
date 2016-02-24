@@ -116,7 +116,7 @@
 					while ($row = mysqli_fetch_array($hasil_baca))
 					{	
 						if (file_exists($row['Image'])) {
-							echo "<img src='".$row['Image']."' height='500' width='500' align='middle'><BR>";
+							echo "<img src='".$row['Image']."' align='middle'><BR>";
 						} 
 						echo $row['IsiPostHTML'];
 					}
