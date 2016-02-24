@@ -114,16 +114,16 @@
             <div id="contact-area">
                 <form enctype="multipart/form-data" method="post" action="new.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
                     <label for="Judul">Judul:</label>
-                    <input type="text" name="Judul" id="Judul">
+                    <input type="text" name="Judul" id="Judul" required>
 
                     <label for="Tanggal">Tanggal:</label>
-                    <input type="text" name="Tanggal" id="Tanggal">
+                    <input type="text" name="Tanggal" id="Tanggal" required>
                     
                     <label for="Konten">Konten:</label><br>
                     <textarea name="Konten" rows="20" cols="20" id="Konten"></textarea>
 
                     <label for="Gambar">Gambar:</label><br>
-                    <input type="file" name="Gambar" id="Gambar">
+                    <input type="file" name="Gambar" id="Gambar" required>
 
                     <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 

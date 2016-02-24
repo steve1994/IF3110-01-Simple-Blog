@@ -74,10 +74,10 @@
 					<input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                     <label for="Username">Username:</label>
-                    <input type="text" name="Username" id="Username">
+                    <input type="text" name="Username" id="Username" required>
                     
                     <label for="Password">Password:</label>
-                    <input type="password" name="Password" id="Password">
+                    <input type="password" name="Password" id="Password" required>
 
                     <input type="submit" name="submit" value="Login" class="submit-button">
                 </form>

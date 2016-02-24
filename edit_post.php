@@ -200,7 +200,7 @@
 					</textarea>
 
 					<label for="Gambar">Gambar:</label>
-                    <input type="file" name="Gambar" id="Gambar">
+                    <input type="file" name="Gambar" id="Gambar" required>
 
                     <input type="submit" name="submit" value="Simpan" class="submit-button">
                 </form>

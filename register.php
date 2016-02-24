@@ -73,16 +73,16 @@
                 <form method="post" action="validate_registrasi.php" name="validate_registrasi" onsubmit="return ValidasiPassword()">
 
                     <label for="Username">Username:</label>
-                    <input type="text" name="Username" id="Username">
+                    <input type="text" name="Username" id="Username" required>
 
                     <label for="Email">Email:</label>
-                    <input type="text" name="Email" id="Email">   
+                    <input type="text" name="Email" id="Email" required>   
 
                     <label for="Password">Password:</label>
-                    <input type="password" name="Password" id="Password" class="masked">
+                    <input type="password" name="Password" id="Password" class="masked" required>
 
                     <label for="Confirm Again">Confirm :</label>
-                    <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="masked">
+                    <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="masked" required>
 
                     <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <input type="hidden" name="hashed_password" id="hashed_password">
@@ -121,7 +121,6 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 <script type="text/javascript" src="assets/js/generate_token.js"></script>
 <script type="text/javascript" src="assets/js/validasi_register_password.js"></script>
-<script type="text/javascript" src="assets/js/validasi_email.js"></script>
 <script type="text/javascript" src="CryptoJS/rollups/sha256.js"></script>
 
 </body>
