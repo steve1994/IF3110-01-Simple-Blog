@@ -62,10 +62,6 @@
 	while ($result->fetch()) {
 		$path_image_related .= $ThisUserImagesPath;
 	}
-	/*while ($row = mysqli_fetch_array($hasil_baca))
-	{	
-		$path_image_related .= $row['Image'];
-	}*/
 	mysqli_close($connection);
 
 	// Setelah diketahui path hapus file terkait
@@ -92,7 +88,6 @@
 	}
 	$result->bind_param('i',$ID_post);
 	$result->execute();
-	//mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
 	mysqli_close($connection);
 	
 	// HAPUS KOMENTAR DARI POST TERKAIT
@@ -110,7 +105,6 @@
 	}
 	$result->bind_param('i',$ID_post);
 	$result->execute();
-	//mysqli_query($connection,"DELETE FROM daftarkomentar WHERE ID='$ID_post'");
 	mysqli_close($connection);
 	
 	// Refer ke halaman lain

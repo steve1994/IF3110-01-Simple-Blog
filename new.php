@@ -58,6 +58,7 @@
 			// Check file type and file size
 			$file_size = $_FILES['Gambar']['size'];
 			$file_type = $_FILES['Gambar']['type'];
+			echo $file_type."<BR>";
 
 			if (($file_size < 2000000) && (strpos($file_type,"image"))) {
 				// Simpan image ke server 
@@ -86,8 +87,8 @@
 				// Redirect ke halaman login
 				header("Location:index.php");
 			} else {
-				echo "Not supported file upload\n";
-				echo "<a href='new_post.php'> BACK TO FORM </a>";
+				echo "Not supported file upload<BR>";
+				echo "<a href='index.php'> BACK TO MAIN PAGE </a>";
 			}
 		}
 	} else {

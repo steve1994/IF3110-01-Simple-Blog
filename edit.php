@@ -46,41 +46,49 @@
 	// Buat koneksi ke database tubesweb1
 	if ($csrf_token == $_SESSION['csrf_token']) {
 		if (isset($_FILES["Gambar"]["name"])) {
-			// Dapatkan path nama baru dari gambar
-			$path_images = 'images/'.$_FILES['Gambar']['name'];
-			// Buat direktori penyimpanan image jika belum ada
-			if (!file_exists('images/')) {
-				mkdir('images/');
-			}
-			// Upload file jpg ke direktori tersebut
-			if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
-				echo "File is valid\n";
-			} else {
-				echo "Upload failed\n";
-			}
+			// Check file type and file size
+			$file_size = $_FILES['Gambar']['size'];
+			$file_type = $_FILES['Gambar']['type'];
 
-			// Update data dari user ke db
-			$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-			// DAPAT VARIABEL POST GLOBAL
-			$ID= mysqli_real_escape_string($connection,htmlentities($_POST['ID_post'])); // dapat ID post
-			$judul = mysqli_real_escape_string($connection,htmlentities($_POST['Judul'])); // dapat judul post
-			$tanggal_baru = mysqli_real_escape_string($connection,htmlentities($_POST['Tanggal'])); // dapat tanggal baru dari judul post terkait
-			$konten_baru = mysqli_real_escape_string($connection,htmlentities($_POST['Konten'])); // dapat konten baru dari judul post terkait
-			// Lakukan update data ke tabel daftarpost dengan ID yang sudah didapatkan
-			$updatequery = "UPDATE daftarpost SET Judul=?, Tanggal=?, IsiPostHTML=?, Image=? WHERE daftarpost.ID=?";
-			$result = $connection->prepare($updatequery);
-			if ($result === false) {
-				trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+			if (($file_size < 2000000) && (strpos($file_type,"image"))) {
+				// Dapatkan path nama baru dari gambar
+				$path_images = 'images/'.$_FILES['Gambar']['name'];
+				// Buat direktori penyimpanan image jika belum ada
+				if (!file_exists('images/')) {
+					mkdir('images/');
+				}
+				// Upload file jpg ke direktori tersebut
+				if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
+					echo "File is valid\n";
+				} else {
+					echo "Upload failed\n";
+				}
+
+				// Update data dari user ke db
+				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				// DAPAT VARIABEL POST GLOBAL
+				$ID= mysqli_real_escape_string($connection,htmlentities($_POST['ID_post'])); // dapat ID post
+				$judul = mysqli_real_escape_string($connection,htmlentities($_POST['Judul'])); // dapat judul post
+				$tanggal_baru = mysqli_real_escape_string($connection,htmlentities($_POST['Tanggal'])); // dapat tanggal baru dari judul post terkait
+				$konten_baru = mysqli_real_escape_string($connection,htmlentities($_POST['Konten'])); // dapat konten baru dari judul post terkait
+				// Lakukan update data ke tabel daftarpost dengan ID yang sudah didapatkan
+				$updatequery = "UPDATE daftarpost SET Judul=?, Tanggal=?, IsiPostHTML=?, Image=? WHERE daftarpost.ID=?";
+				$result = $connection->prepare($updatequery);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+				}
+				$result->bind_param('ssssi',$judul,$tanggal_baru,$konten_baru,$path_images,$ID);
+				$result->execute();
+				mysqli_close($connection);
+
+				// Refer ke halaman lain
+				header("Location:index.php");
+			} else {
+				echo "Not supported file upload<BR>";
+				echo "<a href='index.php'> BACK TO MAIN PAGE </a>";
 			}
-			$result->bind_param('ssssi',$judul,$tanggal_baru,$konten_baru,$path_images,$ID);
-			$result->execute();
-			// Akhiri transaksi
-			mysqli_close($connection);
 		}
 	}
-	
-	// Refer ke halaman lain
-	header("Location:index.php");
 ?>
 
 </body>
