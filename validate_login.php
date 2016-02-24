@@ -1,7 +1,7 @@
 <?php 
 	$csrf_token = $_POST['csrf_token'];
 	session_start();
-	
+
 	if ($csrf_token == $_SESSION['csrf_token']) {
 		// Check record into database
 		$conn = new mysqli("localhost","root","","tubesweb1");
@@ -39,6 +39,16 @@
 			    return $randomString;
 			}
 			$_SESSION['user_token'] = generateRandomString();
+			// Update session saat ini ke tabel user
+			$conn = new mysqli("localhost","root","","tubesweb1");
+			$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
+			$result = $conn->prepare($update_session_query);
+			if ($result === false) {
+				trigger_error('Wrong SQL: ' . $update_session_query . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
+			}
+			$result->bind_param('ss',$_SESSION['user_token'],$Username);
+			$result->execute();
+			$conn->close();
 			// Redirect ke halaman utama
 			header('Location:index.php');
 		} else {
