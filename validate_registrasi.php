@@ -29,12 +29,12 @@
 			$conn = new mysqli("localhost","root","","tubesweb1");
 			// Insert Using Bind Variable
 			$sql = "INSERT INTO user (Username,Password,Email) VALUES (?,?,?)";
-			$result2 = $conn->prepare($sql);
+			$result = $conn->prepare($sql);
 			if ($result === false) {
 				trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
 			}
-			$result2->bind_param('sss',$Username,$Password,$Email);
-			$result2->execute();
+			$result->bind_param('sss',$Username,$Password,$Email);
+			$result->execute();
 			$conn->close();
 			// Redirect ke login 
 			header('Location:login.php');

@@ -40,21 +40,35 @@
 <body class="default">
 	
 <?php
-	$ID_post = $_GET['q']; // passing parameter url
 	// HAPUS GAMBAR DARI POST TERKAIT
 	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	// ESCAPE ID POST FROM STRING SQL INJECTION
+	$ID_post = mysqli_real_escape_string($connection,htmlentities($_GET['q'])); 
+
 	if (mysqli_connect_errno())
 	{
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
-	$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost WHERE ID='$ID_post'");
+	//$hasil_baca = mysqli_query($connection, "SELECT Images FROM daftarpost WHERE ID=?");
+	$select_post = "SELECT Image FROM daftarpost WHERE ID=?";
+	$result = $connection->prepare($select_post);
+	if ($result === false) {
+		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+	}
+	$result->bind_param('i',$ID_post);
+	$result->execute();
+	$result->bind_result($ThisUserImagesPath);
 	$path_image_related = "";
-	while ($row = mysqli_fetch_array($hasil_baca))
+	while ($result->fetch()) {
+		$path_image_related .= $ThisUserImagesPath;
+	}
+	/*while ($row = mysqli_fetch_array($hasil_baca))
 	{	
 		$path_image_related .= $row['Image'];
-	}
+	}*/
 	mysqli_close($connection);
 
+	// Setelah diketahui path hapus file terkait
 	if (file_exists($path_image_related)) {
 		if (unlink($path_image_related)) {
 			echo "Image this post deleted";
@@ -71,7 +85,14 @@
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
 	// DELETE RECORD DI DATABASE
-	mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
+	$delete_post = "DELETE FROM daftarpost WHERE ID=?";
+	$result = $connection->prepare($delete_post);
+	if ($result === false) {
+		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+	}
+	$result->bind_param('i',$ID_post);
+	$result->execute();
+	//mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
 	mysqli_close($connection);
 	
 	// HAPUS KOMENTAR DARI POST TERKAIT
@@ -82,7 +103,14 @@
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
 	// DELETE RECORD DI DATABASE
-	mysqli_query($connection,"DELETE FROM daftarkomentar WHERE ID='$ID_post'");
+	$delete_komentar = "DELETE FROM daftarkomentar WHERE ID=?";
+	$result = $connection->prepare($delete_komentar);
+	if ($result === false) {
+		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+	}
+	$result->bind_param('i',$ID_post);
+	$result->execute();
+	//mysqli_query($connection,"DELETE FROM daftarkomentar WHERE ID='$ID_post'");
 	mysqli_close($connection);
 	
 	// Refer ke halaman lain
