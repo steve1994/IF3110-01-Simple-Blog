@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2016 at 12:30 PM
+-- Generation Time: Feb 24, 2016 at 02:18 PM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -34,17 +34,7 @@ CREATE TABLE IF NOT EXISTS `daftarkomentar` (
   `IsiKomentar` text NOT NULL,
   `ID_post_terkait` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
---
--- Dumping data for table `daftarkomentar`
---
-
-INSERT INTO `daftarkomentar` (`ID`, `Nama`, `TanggalKomentar`, `Email`, `IsiKomentar`, `ID_post_terkait`) VALUES
-(1, 'Steve', '24-02-2016', 'steveharnadi@gmail.com', 'ffdsfsdafsddsfds', 99),
-(2, 'BEGOK', '24-02-2016', 'begok@gmail.com', 'BEGOK', 99),
-(3, 'sutil', '24-02-2016', 'sutil@gmail.com', 'sutil', 98),
-(4, 'Cakep', '24-02-2016', '13512035@gmail.com', 'Cakep', 100);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -58,17 +48,9 @@ CREATE TABLE IF NOT EXISTS `daftarpost` (
   `Tanggal` text NOT NULL,
   `IsiPostHTML` text NOT NULL,
   `Image` text NOT NULL,
+  `ID_poster` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
-
---
--- Dumping data for table `daftarpost`
---
-
-INSERT INTO `daftarpost` (`ID`, `Judul`, `Tanggal`, `IsiPostHTML`, `Image`) VALUES
-(98, 'Saya Suka Kue', '12-12-2018', 'Ffdsfsdfsdfsdfsdfsdfsdfsdfsd', 'images/jawaban sister.jpg'),
-(99, 'Aku Seorang Kapiten', '12-12-2018', '												fdsfsdfsdfsda										', 'images/memenonsense.jpg'),
-(100, 'Harimau', '11-12-2016', 'Melaya', 'images/picture000.jpg');
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=104 ;
 
 -- --------------------------------------------------------
 
