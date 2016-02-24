@@ -53,32 +53,123 @@
 
 		// Handle session validity
 		if ($valid_user) {
-			// Destroy old session
-			$_SESSION = array();
-			session_destroy();
-			// Restart new session
-			session_start();
-			function generateRandomString() {
-			    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			    $charactersLength = strlen($characters);
-			    $randomString = '';
-			    $length = 20;
-			    for ($i = 0; $i < $length; $i++) {
-			        $randomString .= $characters[rand(0, $charactersLength - 1)];
-			    }
-			    return $randomString;
-			}
-			$_SESSION['user_token'] = generateRandomString();
-			// Update session ID to user
-			$conn = new mysqli("localhost","root","","tubesweb1");
-			$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
-			$result = $conn->prepare($update_session_query);
-			if ($result === false) {
-				trigger_error('Wrong SQL: ' . $update_session_query . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
-			}
-			$result->bind_param('ss',$_SESSION['user_token'],$ThisSessionUsername);
-			$result->execute();
-			$conn->close();
+			// Check if this post owned by this user
+            $connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+            $sql = "SELECT Username FROM daftarpost WHERE ID=?";
+            $result = $connection->prepare($sql);
+            if ($result === false) {
+                trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+            }
+            $result->bind_param('i',$_GET['q']);
+            $result->execute();
+            $result->bind_result($UsernameThisPost);
+            $valid_user_this_post = False;
+            while ($result->fetch()) {
+                if ($UsernameThisPost == $ThisSessionUsername) {
+                    $valid_user_this_post = True;
+                }
+            }
+
+            if ($valid_user_this_post) {
+            	// Destroy old session
+				$_SESSION = array();
+				session_destroy();
+				// Restart new session
+				session_start();
+				function generateRandomString() {
+				    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				    $charactersLength = strlen($characters);
+				    $randomString = '';
+				    $length = 20;
+				    for ($i = 0; $i < $length; $i++) {
+				        $randomString .= $characters[rand(0, $charactersLength - 1)];
+				    }
+				    return $randomString;
+				}
+				$_SESSION['user_token'] = generateRandomString();
+				// Update session ID to user
+				$conn = new mysqli("localhost","root","","tubesweb1");
+				$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
+				$result = $conn->prepare($update_session_query);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $update_session_query . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
+				}
+				$result->bind_param('ss',$_SESSION['user_token'],$ThisSessionUsername);
+				$result->execute();
+				$conn->close();
+
+
+				// HAPUS GAMBAR DARI POST TERKAIT
+				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				// ESCAPE ID POST FROM STRING SQL INJECTION
+				$ID_post = mysqli_real_escape_string($connection,htmlentities($_GET['q'])); 
+
+				if (mysqli_connect_errno())
+				{
+					echo "Failed to connect to MySQL: " .mysqli_connect_error();
+				}
+				//$hasil_baca = mysqli_query($connection, "SELECT Images FROM daftarpost WHERE ID=?");
+				$select_post = "SELECT Image FROM daftarpost WHERE ID=?";
+				$result = $connection->prepare($select_post);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+				}
+				$result->bind_param('i',$ID_post);
+				$result->execute();
+				$result->bind_result($ThisUserImagesPath);
+				$path_image_related = "";
+				while ($result->fetch()) {
+					$path_image_related .= $ThisUserImagesPath;
+				}
+				mysqli_close($connection);
+
+				// Setelah diketahui path hapus file terkait
+				if (file_exists($path_image_related)) {
+					if (unlink($path_image_related)) {
+						echo "Image this post deleted";
+					} else {
+						echo "Failed to delete image";
+					}
+				}
+				
+				// HAPUS POST DARI TABEL DAFTAR POST
+				// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
+				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				if (mysqli_connect_errno())
+				{
+					echo "Failed to connect to MySQL: " .mysqli_connect_error();
+				}
+				// DELETE RECORD DI DATABASE
+				$delete_post = "DELETE FROM daftarpost WHERE ID=?";
+				$result = $connection->prepare($delete_post);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+				}
+				$result->bind_param('i',$ID_post);
+				$result->execute();
+				mysqli_close($connection);
+				
+				// HAPUS KOMENTAR DARI POST TERKAIT
+				// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
+				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				if (mysqli_connect_errno())
+				{
+					echo "Failed to connect to MySQL: " .mysqli_connect_error();
+				}
+				// DELETE RECORD DI DATABASE
+				$delete_komentar = "DELETE FROM daftarkomentar WHERE ID_post_terkait=?";
+				$result = $connection->prepare($delete_komentar);
+				if ($result === false) {
+					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+				}
+				$result->bind_param('i',$ID_post);
+				$result->execute();
+				mysqli_close($connection);
+				// Refer ke halaman lain
+				header("Location:index.php");
+            } else {
+            	header('Location:index.php');
+            }
 		} else {
 			header('Location:login.php');
 		}
@@ -87,77 +178,6 @@
 
 <body class="default">
 	
-<?php
-	// HAPUS GAMBAR DARI POST TERKAIT
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-	// ESCAPE ID POST FROM STRING SQL INJECTION
-	$ID_post = mysqli_real_escape_string($connection,htmlentities($_GET['q'])); 
-
-	if (mysqli_connect_errno())
-	{
-		echo "Failed to connect to MySQL: " .mysqli_connect_error();
-	}
-	//$hasil_baca = mysqli_query($connection, "SELECT Images FROM daftarpost WHERE ID=?");
-	$select_post = "SELECT Image FROM daftarpost WHERE ID=?";
-	$result = $connection->prepare($select_post);
-	if ($result === false) {
-		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
-	}
-	$result->bind_param('i',$ID_post);
-	$result->execute();
-	$result->bind_result($ThisUserImagesPath);
-	$path_image_related = "";
-	while ($result->fetch()) {
-		$path_image_related .= $ThisUserImagesPath;
-	}
-	mysqli_close($connection);
-
-	// Setelah diketahui path hapus file terkait
-	if (file_exists($path_image_related)) {
-		if (unlink($path_image_related)) {
-			echo "Image this post deleted";
-		} else {
-			echo "Failed to delete image";
-		}
-	}
-	
-	// HAPUS POST DARI TABEL DAFTAR POST
-	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-	if (mysqli_connect_errno())
-	{
-		echo "Failed to connect to MySQL: " .mysqli_connect_error();
-	}
-	// DELETE RECORD DI DATABASE
-	$delete_post = "DELETE FROM daftarpost WHERE ID=?";
-	$result = $connection->prepare($delete_post);
-	if ($result === false) {
-		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
-	}
-	$result->bind_param('i',$ID_post);
-	$result->execute();
-	mysqli_close($connection);
-	
-	// HAPUS KOMENTAR DARI POST TERKAIT
-	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
-	if (mysqli_connect_errno())
-	{
-		echo "Failed to connect to MySQL: " .mysqli_connect_error();
-	}
-	// DELETE RECORD DI DATABASE
-	$delete_komentar = "DELETE FROM daftarkomentar WHERE ID_post_terkait=?";
-	$result = $connection->prepare($delete_komentar);
-	if ($result === false) {
-		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
-	}
-	$result->bind_param('i',$ID_post);
-	$result->execute();
-	mysqli_close($connection);
-	
-	// Refer ke halaman lain
-	header("Location:index.php");
-?>
 
 </body>
 </html>

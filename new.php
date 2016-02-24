@@ -40,6 +40,22 @@
 
 <body class="default">
 <?php	
+	// Get user ID from this user session
+	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	$sql = "SELECT Username FROM user WHERE SessionID=?";
+	$result = $connection->prepare($sql);
+	if ($result === false) {
+		trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
+	}
+	$result->bind_param('s',$_SESSION['user_token']);
+	$result->execute();
+	$result->bind_result($ThisUserUsername);
+	$this_session_username = "";
+	while ($result->fetch()) {
+		$this_session_username .= $ThisUserUsername;
+	}
+
+	// Insert post dengan kriteria tertentu
 	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
 	if (mysqli_connect_errno())
 	{
@@ -62,12 +78,12 @@
 			if (($file_size < 2000000) and (strpos($file_type,"image")) !== FALSE) {
 				// Simpan image ke server 
 				$path_images = 'images/'.$_FILES['Gambar']['name'];
-				$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES (?,?,?,?)";
+				$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image, Username) VALUES (?,?,?,?,?)";
 				$result = $connection->prepare($insertquery);
 				if ($result === false) {
 					trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
 				}
-				$result->bind_param('ssss',$judul,$tanggal,$content,$path_images);
+				$result->bind_param('sssss',$judul,$tanggal,$content,$path_images,$this_session_username);
 				$result->execute();
 				mysqli_close($connection);
 
@@ -94,8 +110,6 @@
 		// Redirect ke form tambah post
 		header("Location:new_post.php");
 	}
-
-	
 ?>
 
 </body>

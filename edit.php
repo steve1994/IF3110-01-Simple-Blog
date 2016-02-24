@@ -40,6 +40,7 @@
 
 <body class="default">
 <?php
+	// CSRF form token
 	$csrf_token = $_POST['csrf_token'];
 
 	// UPDATE POST DENGAN ID YANG SUDAH DICARI SEBELUMNYA
