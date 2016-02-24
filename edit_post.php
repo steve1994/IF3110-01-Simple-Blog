@@ -52,6 +52,17 @@
 <?php
 	// Mencatat judul post terkait
 	$ID_post = $_GET["q2"];
+	function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        $length = 20;
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    $_SESSION['csrf_token'] = generateRandomString();
 ?>
 
 <article class="art simple post">
@@ -64,8 +75,9 @@
             <h2>Edit Post</h2>
 
             <div id="contact-area">
-                <form method="post" action="edit.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
+                <form enctype="multipart/form-data" method="post" action="edit.php" name="form_new_post" onsubmit="return KeluarkanValidasi()">
 					<input type="hidden" name="ID_post" id="ID_post" value="<?php echo $ID_post; ?>">
+					<input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                     <label for="Judul">Judul:</label>
                     <input type="text" name="Judul" id="Judul" value=
@@ -128,6 +140,9 @@
 						?>
 					</textarea>
 
+					<label for="Gambar">Gambar:</label>
+                    <input type="file" name="Gambar" id="Gambar">
+
                     <input type="submit" name="submit" value="Simpan" class="submit-button">
                 </form>
             </div>
@@ -163,8 +178,5 @@
 <script type="text/javascript" src="assets/js/respond.min.js"></script>
 
 </body>
-<<<<<<< HEAD
+
 </html>
-=======
-</html>
->>>>>>> 99f608b41a7f80cbd1e93ffe79398af40bb9b94b

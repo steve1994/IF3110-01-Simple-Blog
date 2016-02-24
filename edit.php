@@ -38,11 +38,40 @@
 	$judul = htmlentities($_POST['Judul']); // dapat judul post
 	$tanggal_baru = htmlentities($_POST['Tanggal']); // dapat tanggal baru dari judul post terkait
 	$konten_baru = htmlentities($_POST['Konten']); // dapat konten baru dari judul post terkait
+	$csrf_token = $_POST['csrf_token'];
 ?>
 
 <?php	
 	// UPDATE POST DENGAN ID YANG SUDAH DICARI SEBELUMNYA
 	// Buat koneksi ke database tubesweb1
+	if (isset($_FILES["Gambar"]["name"])) {
+		// Dapatkan path nama baru dari gambar
+		$path_images = 'images/'.$_FILES['Gambar']['name'];
+		// Buat direktori penyimpanan image jika belum ada
+		if (!file_exists('images/')) {
+			mkdir('images/');
+		}
+		// Upload file jpg ke direktori tersebut
+		if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
+			echo "File is valid\n";
+		} else {
+			echo "Upload failed\n";
+		}
+
+		// Update data dari user ke db
+		$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+		if (mysqli_connect_errno())
+		{
+			echo "Failed to connect to MySQL: " .mysqli_connect_error();
+		}
+		// Lakukan update data ke tabel daftarpost dengan ID yang sudah didapatkan
+		$updatequery = "UPDATE daftarpost SET Judul='$judul', Tanggal='$tanggal_baru', IsiPostHTML='$konten_baru', Image='$path_images' WHERE daftarpost.ID='$ID'";
+		mysqli_query($connection, $updatequery);	
+		// Akhiri transaksi
+		mysqli_close($connection);
+	}
+
+
 	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
 	if (mysqli_connect_errno())
 	{
@@ -59,5 +88,6 @@
 	// Refer ke halaman lain
 	header("Location:index.php");
 ?>
+
 </body>
 </html>

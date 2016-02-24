@@ -34,6 +34,27 @@
 	
 <?php
 	$ID_post = $_GET['q']; // passing parameter url
+	// HAPUS GAMBAR DARI POST TERKAIT
+	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	if (mysqli_connect_errno())
+	{
+		echo "Failed to connect to MySQL: " .mysqli_connect_error();
+	}
+	$hasil_baca = mysqli_query($connection, "SELECT * FROM daftarpost WHERE ID='$ID_post'");
+	$path_image_related = "";
+	while ($row = mysqli_fetch_array($hasil_baca))
+	{	
+		$path_image_related .= $row['Image'];
+	}
+	mysqli_close($connection);
+
+	if (file_exists($path_image_related)) {
+		if (unlink($path_image_related)) {
+			echo "Image this post deleted";
+		} else {
+			echo "Failed to delete image";
+		}
+	}
 	
 	// HAPUS POST DARI TABEL DAFTAR POST
 	// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
@@ -42,7 +63,6 @@
 	{
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();
 	}
-
 	// DELETE RECORD DI DATABASE
 	mysqli_query($connection,"DELETE FROM daftarpost WHERE ID='$ID_post'");
 	mysqli_close($connection);
