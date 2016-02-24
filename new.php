@@ -47,21 +47,25 @@
 	}
 	// Asumsi : tabel daftarpost sudah dibuat secara manual dalam database tubesweb1
 	// Langsung lakukan insert data dari form ke tabel daftarpost
-	$judul = htmlentities($_POST['Judul']);
-	$tanggal = htmlentities($_POST['Tanggal']);
-	$content = htmlentities($_POST['Konten']);
 	$csrf_token = $_POST['csrf_token'];
 
 	session_start();
 	if ($csrf_token == $_SESSION['csrf_token']) {
+		// Escape SQL Injection
+		$judul = mysqli_real_escape_string($connection,htmlentities($_POST['Judul']));
+		$tanggal = mysqli_real_escape_string($connection,htmlentities($_POST['Tanggal']));
+		$content = mysqli_real_escape_string($connection,htmlentities($_POST['Konten']));
+
 		if (isset($_FILES['Gambar']['name'])) {
 			// Simpan image ke server 
 			$path_images = 'images/'.$_FILES['Gambar']['name'];
-			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES ('$judul','$tanggal','$content','$path_images')";
-			if (!mysqli_query($connection, $insertquery))
-			{
-				die('Error: '. mysqli_error($connection));
+			$insertquery = "INSERT INTO daftarpost (Judul, Tanggal, IsiPostHTML, Image) VALUES (?,?,?,?)";
+			$result = $connection->prepare($insertquery);
+			if ($result === false) {
+				trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $connection->errno . ' ' . $connection->error, E_USER_ERROR);
 			}
+			$result->bind_param('ssss',$judul,$tanggal,$content,$path_images);
+			$result->execute();
 			mysqli_close($connection);
 
 			// Buat direktori penyimpanan image jika belum ada

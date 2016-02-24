@@ -1,32 +1,42 @@
 <?php 
-	$Username = $_POST['Username'];
-	$Password = $_POST['Password'];
-	$Email = htmlspecialchars($_POST['Email']);
 	$csrf_token = $_POST['csrf_token'];
-
 	session_start();
 	if ($csrf_token == $_SESSION['csrf_token']) {
-		// Check jika ternyata user sudah terdaftar
 		$conn = new mysqli("localhost","root","","tubesweb1");
-		$sql = "SELECT * FROM user WHERE Username='$Username'";
-		$result = $conn->query($sql);
+		// Escape SQL Injection String
+		$Username = mysqli_real_escape_string($conn,htmlentities($_POST['Username']));
+		$Password = mysqli_real_escape_string($conn,htmlentities($_POST['Password']));
+		$Email = mysqli_real_escape_string($conn,htmlentities($_POST['Email']));
+		// Search through table using bind variable
+		$sql = "SELECT * FROM user WHERE Username=?";
+		$result = $conn->prepare($sql);
+		if ($result === false) {
+			trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
+		}
+		$result->bind_param('s',$Username);
+		$result->execute();
+		$result->bind_result($ThisUsername,$ThisPassword,$ThisEmail);
 		$is_user_exist = False;
-		if ($result->num_rows > 0) {
+		while ($result->fetch()) {
 			$is_user_exist = True;
-		} 
-		$conn->close();
+		}
 
+		// Check if current user has exist in database
 		if ($is_user_exist) {
 			header('Location:register.php');
 		} else {
 			// Update username, password, beserta token user 
 			$conn = new mysqli("localhost","root","","tubesweb1");
-			$sql = "INSERT INTO user (Username,Password,Email) VALUES ('$Username','$Password','$Email')";
-			$conn->query($sql);
+			// Insert Using Bind Variable
+			$sql = "INSERT INTO user (Username,Password,Email) VALUES (?,?,?)";
+			$result2 = $conn->prepare($sql);
+			if ($result === false) {
+				trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
+			}
+			$result2->bind_param('sss',$Username,$Password,$Email);
+			$result2->execute();
 			$conn->close();
 			// Redirect ke login 
-			//echo $Password;
-			//481f6cc0511143ccdd7e2d1b1b94faf0a700a8b49cd13922a70b5ae28acaa8c5
 			header('Location:login.php');
 		}
 	} else {

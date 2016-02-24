@@ -1,23 +1,30 @@
 <?php 
 	$csrf_token = $_POST['csrf_token'];
-	$Username = $_POST['Username'];
-	$Password = $_POST['Password'];
-
 	session_start();
+	
 	if ($csrf_token == $_SESSION['csrf_token']) {
 		// Check record into database
 		$conn = new mysqli("localhost","root","","tubesweb1");
-		$sql = "SELECT * FROM user WHERE Username='$Username'";
-		$result = $conn->query($sql);
+		// Escape SQL String Injection
+		$Username = mysqli_real_escape_string($conn,htmlentities($_POST['Username']));
+		$Password = mysqli_real_escape_string($conn,htmlentities($_POST['Password']));
+		// Check login status
+		$sql = "SELECT Password FROM user WHERE Username=?";
+		$result = $conn->prepare($sql);
+		if ($result === false) {
+			trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->errno . ' ' . $conn->error, E_USER_ERROR);
+		}
+		$result->bind_param('s',$Username);
+		$result->execute();
+		$result->bind_result($ThisUserPassword);
 		$login_status = False;
-		if ($result->num_rows > 0) {
-			while ($row = $result->fetch_assoc()) {
-				if ($row['Password'] == $Password) {
-					$login_status = True;
-				}
-			} 
-		} 
+		while ($result->fetch()) {
+			if ($ThisUserPassword == $Password) {
+				$login_status = True;
+			}
+		}
 		$conn->close();
+
 		// Redirect Into Proper State (True / False)
 		if ($login_status) {
 			// Generate new user token pasca-login
