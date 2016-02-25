@@ -4,7 +4,7 @@
 
 	if ($csrf_token == $_SESSION['csrf_token']) {
 		// Check record into database
-		$conn = new mysqli("localhost","root","","tubesweb1");
+		$conn = new mysqli("localhost","root","admin","tubesweb1");
 		// Escape SQL String Injection
 		$Username = mysqli_real_escape_string($conn,htmlentities($_POST['Username']));
 		$Password = mysqli_real_escape_string($conn,htmlentities($_POST['Password']));
@@ -40,7 +40,7 @@
 			}
 			$_SESSION['user_token'] = generateRandomString();
 			// Update session saat ini ke tabel user
-			$conn = new mysqli("localhost","root","","tubesweb1");
+			$conn = new mysqli("localhost","root","admin","tubesweb1");
 			$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
 			$result = $conn->prepare($update_session_query);
 			if ($result === false) {

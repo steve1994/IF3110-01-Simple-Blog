@@ -36,7 +36,7 @@
 		header('Location:login.php');
 	} else {
 		// Check session token di database
-		$conn = new mysqli("localhost","root","","tubesweb1");
+		$conn = new mysqli("localhost","root","admin","tubesweb1");
 		$sql = "SELECT Username FROM user WHERE SessionID=?";
 		$result = $conn->prepare($sql);
 		if ($result === false) {
@@ -54,7 +54,7 @@
 		// Handle session validity
 		if ($valid_user) {
 			// Check if this post owned by this user
-            $connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+            $connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
             $sql = "SELECT Username FROM daftarpost WHERE ID=?";
             $result = $connection->prepare($sql);
             if ($result === false) {
@@ -88,7 +88,7 @@
 				}
 				$_SESSION['user_token'] = generateRandomString();
 				// Update session ID to user
-				$conn = new mysqli("localhost","root","","tubesweb1");
+				$conn = new mysqli("localhost","root","admin","tubesweb1");
 				$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
 				$result = $conn->prepare($update_session_query);
 				if ($result === false) {
@@ -100,7 +100,7 @@
 
 
 				// HAPUS GAMBAR DARI POST TERKAIT
-				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 				// ESCAPE ID POST FROM STRING SQL INJECTION
 				$ID_post = mysqli_real_escape_string($connection,htmlentities($_GET['q'])); 
 
@@ -134,7 +134,7 @@
 				
 				// HAPUS POST DARI TABEL DAFTAR POST
 				// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
-				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 				if (mysqli_connect_errno())
 				{
 					echo "Failed to connect to MySQL: " .mysqli_connect_error();
@@ -151,7 +151,7 @@
 				
 				// HAPUS KOMENTAR DARI POST TERKAIT
 				// Buat koneksi ke phpmyadmin sekaligus database tubesweb1
-				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 				if (mysqli_connect_errno())
 				{
 					echo "Failed to connect to MySQL: " .mysqli_connect_error();

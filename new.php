@@ -41,7 +41,7 @@
 <body class="default">
 <?php	
 	// Get user ID from this user session
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 	$sql = "SELECT Username FROM user WHERE SessionID=?";
 	$result = $connection->prepare($sql);
 	if ($result === false) {
@@ -56,7 +56,7 @@
 	}
 
 	// Insert post dengan kriteria tertentu
-	$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+	$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 	if (mysqli_connect_errno())
 	{
 		echo "Failed to connect to MySQL: " .mysqli_connect_error();

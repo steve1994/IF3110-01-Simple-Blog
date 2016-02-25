@@ -66,7 +66,7 @@
 				}
 
 				// Update data dari user ke db
-				$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+				$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 				// DAPAT VARIABEL POST GLOBAL
 				$ID= mysqli_real_escape_string($connection,htmlentities($_POST['ID_post'])); // dapat ID post
 				$judul = mysqli_real_escape_string($connection,htmlentities($_POST['Judul'])); // dapat judul post

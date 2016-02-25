@@ -2,7 +2,7 @@
 	$csrf_token = $_POST['csrf_token'];
 	session_start();
 	if ($csrf_token == $_SESSION['csrf_token']) {
-		$conn = new mysqli("localhost","root","","tubesweb1");
+		$conn = new mysqli("localhost","root","admin","tubesweb1");
 		// Escape SQL Injection String
 		$Username = mysqli_real_escape_string($conn,htmlentities($_POST['Username']));
 		$Password = mysqli_real_escape_string($conn,htmlentities($_POST['Password']));
@@ -26,7 +26,7 @@
 			header('Location:register.php');
 		} else {
 			// Update username, password, beserta token user 
-			$conn = new mysqli("localhost","root","","tubesweb1");
+			$conn = new mysqli("localhost","root","admin","tubesweb1");
 			// Insert Using Bind Variable
 			$sql = "INSERT INTO user (Username,Password,Email) VALUES (?,?,?)";
 			$result = $conn->prepare($sql);

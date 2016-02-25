@@ -36,7 +36,7 @@
 		header('Location:login.php');
 	} else {
 		// Check session token di database
-		$conn = new mysqli("localhost","root","","tubesweb1");
+		$conn = new mysqli("localhost","root","admin","tubesweb1");
 		$sql = "SELECT Username FROM user WHERE SessionID=?";
 		$result = $conn->prepare($sql);
 		if ($result === false) {
@@ -70,7 +70,7 @@
 			}
 			$_SESSION['user_token'] = generateRandomString();
 			// Update session ID to user
-			$conn = new mysqli("localhost","root","","tubesweb1");
+			$conn = new mysqli("localhost","root","admin","tubesweb1");
 			$update_session_query = "UPDATE user SET SessionID=? WHERE Username=?";
 			$result = $conn->prepare($update_session_query);
 			if ($result === false) {
@@ -109,7 +109,7 @@
 				<?php
 					// MENAMPILKAN TANGGAL POST
 					// Buat koneksi ke database tubesweb1
-					$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+					$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 					if (mysqli_connect_errno())
 					{
 						echo "Failed to connect to MySQL: " .mysqli_connect_error();
@@ -128,7 +128,7 @@
 				<?php
 					// MENAMPILKAN JUDUL POST
 					// Buat koneksi ke database tubesweb1
-					$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+					$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 					if (mysqli_connect_errno())
 					{
 						echo "Failed to connect to MySQL: " .mysqli_connect_error();
@@ -154,7 +154,7 @@
 				<?php
 					// MENAMPILKAN KONTEN POST
 					// Buat koneksi ke database tubesweb1
-					$connection = mysqli_connect('localhost', "root", "", "tubesweb1");
+					$connection = mysqli_connect('localhost', "root", "admin", "tubesweb1");
 					if (mysqli_connect_errno())
 					{
 						echo "Failed to connect to MySQL: " .mysqli_connect_error();
