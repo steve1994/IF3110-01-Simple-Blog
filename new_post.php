@@ -96,7 +96,7 @@
 <div class="wrapper">
 
 <nav class="nav">
-    <a style="border:none;" id="logo" href="index.html"><h1>Simple<span>-</span>Blog</h1></a>
+    <a style="border:none;" id="logo" href="index.php"><h1>Simple<span>-</span>Blog</h1></a>
     <ul class="nav-primary">
         <li><a href="new_post.html">+ Tambah Post</a></li>
     </ul>
@@ -136,7 +136,7 @@
 </article>
 
 <footer class="footer">
-    <div class="back-to-top"><a href="">Back to top</a></div>
+    <div class="back-to-top"><a href="index.php">Back to top</a></div>
     <!-- <div class="footer-nav"><p></p></div> -->
     <div class="psi">&Psi;</div>
     <aside class="offsite-links">
