@@ -88,9 +88,9 @@
 				mysqli_close($connection);
 
 				// Buat direktori penyimpanan image jika belum ada
-			/*	if (!file_exists('images/')) {
+				if (!file_exists('images/')) {
 					mkdir('images/');
-				}*/
+				}
 
 				// Upload file jpg ke direktori tersebut
 				if (move_uploaded_file($_FILES['Gambar']['tmp_name'], 'images/'.$_FILES['Gambar']['name'])) {
